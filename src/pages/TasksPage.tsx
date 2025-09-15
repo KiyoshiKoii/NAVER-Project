@@ -150,7 +150,7 @@ const TasksPage: React.FC = () => {
     setIsAiLoading(true);
     setAiSuggestions([]); // Xóa gợi ý cũ
     try {
-      const response = await fetch(`/api/generate-subtasks`, {
+      const response = await fetch('http://localhost:3001/api/generate-subtasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: aiPromptTitle }),

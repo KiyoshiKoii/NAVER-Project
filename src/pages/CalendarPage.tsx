@@ -35,7 +35,7 @@ const CalendarPage: React.FC = () => {
   });
 
   // Sao chép component CustomTimeInput
-  const CustomTimeInput: React.FC<{ value: string; onChange: (newValue: string) => void; timeFormat: '12h' | '24h'; }> = ({ value, onChange  }) => {
+  const CustomTimeInput: React.FC<{ value: string; onChange: (newValue: string) => void; timeFormat: '12h' | '24h'; }> = ({ value, onChange,timeFormat  }) => {
     return <input type="time" value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-lg border border-slate-600 bg-slate-700/50 px-4 py-3 text-slate-200" />;
   };
 

@@ -1,21 +1,22 @@
-export const runtime = 'nodejs';
-
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const app = express();
+const port = process.env.PORT || 3001;
 
-// Cấu hình Google AI
+// --- Cấu hình Google AI ---
+// Lấy API key từ file .env
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+// CẬP NHẬT: Sử dụng model "flash" mới nhất và ổn định nhất
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
 app.use(cors());
 app.use(express.json());
 
-// Endpoint chính
-app.post('/', async (req, res) => {
+// --- ENDPOINT GỌI AI THỰC SỰ ---
+app.post('/api/generate-subtasks', async (req, res) => {
   const { title } = req.body;
 
   if (!title) {
@@ -25,6 +26,7 @@ app.post('/', async (req, res) => {
   console.log(`[AI Server] Received title: "${title}"`);
 
   try {
+    // --- CẬP NHẬT PROMPT YÊU CẦU TIẾNG VIỆT ---
     const prompt = `
       Bạn là một trợ lý quản lý dự án chuyên nghiệp. Nhiệm vụ của bạn là chia một công việc lớn thành một danh sách các công việc phụ nhỏ hơn, có thể thực hiện được.
       
@@ -46,22 +48,28 @@ app.post('/', async (req, res) => {
 
     console.log('[AI Server] Raw AI Response:', text);
 
-    // Xử lý response từ AI
+    // --- BƯỚC LÀM SẠCH DỮ LIỆU ---
+    // Tìm và trích xuất nội dung JSON từ bên trong khối mã Markdown
     const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
     if (jsonMatch && jsonMatch[1]) {
       text = jsonMatch[1];
     }
     
+    // Loại bỏ các ký tự không hợp lệ khác nếu có
     text = text.trim();
+
+    // Parse the cleaned JSON string
     const suggestions = JSON.parse(text);
     
     console.log('[AI Server] Parsed Suggestions:', suggestions);
     res.json({ suggestions });
 
   } catch (error) {
-    console.error('[AI Server] Error:', error);
+    console.error('[AI Server] Error calling Google AI or parsing response:', error);
     res.status(500).json({ error: 'Failed to generate AI suggestions.' });
   }
 });
 
-export default serverless(app);
+app.listen(port, () => {
+  console.log(`✨ Real AI server listening on http://localhost:${port}`);
+});

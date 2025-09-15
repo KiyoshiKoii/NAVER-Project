@@ -6,12 +6,11 @@
   "scripts": {
     "dev": "concurrently \"npm:dev:ui\" \"npm:dev:ai\"",
     "dev:ui": "vite",
-    "dev:ai": "nodemon api/generate-subtasks.js",
+    "dev:ai": "nodemon src/server/server.js",
     "build": "tsc -b && vite build",
-    "start": "node api/generate-subtasks.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "ai-server": "node api/generate-subtasks.js"
+    "ai-server": "node src/server/server.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -20,8 +19,7 @@
     "express": "^5.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.1",
-    "serverless-http": "^4.0.0"
+    "react-router-dom": "^7.9.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
@@ -33,12 +31,10 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
-    "concurrently": "^8.2.2",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
-    "nodemon": "^3.0.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
     "typescript": "~5.8.3",
